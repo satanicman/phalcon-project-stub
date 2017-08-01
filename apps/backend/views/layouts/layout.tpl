@@ -26,15 +26,34 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="{if $page_name}{$page_name}{/if}">
+<body class="skin-blue {if $page_name}{$page_name}{/if}">
 {block name="content"}
 
 {/block}
-
-{if isset($js_files) && isset($js_def)}
+{if isset($js_def) && is_array($js_def) && $js_def|@count}
     <script type="text/javascript">
-    {$js_def}
+        {foreach from=$js_def key=k item=def}
+        {if !empty($k) && is_string($k)}
+        {if is_bool($def)}
+        var {$k} = {$def|var_export:true};
+        {elseif is_int($def)}
+        var {$k} = {$def|intval};
+        {elseif is_float($def)}
+        var {$k} = {$def|floatval|replace:',':'.'};
+        {elseif is_string($def)}
+        var {$k} = '{$def|strval}';
+        {elseif is_array($def) || is_object($def)}
+        var {$k} = {$def|json_encode};
+        {elseif is_null($def)}
+        var {$k} = null;
+        {else}
+        var {$k} = '{$def|@addcslashes:'\''}';
+        {/if}
+        {/if}
+        {/foreach}
     </script>
+{/if}
+{if isset($js_files)}
     {foreach from=$js_files item=js_uri}
         <script type="text/javascript" src="{$js_uri|escape:'html':'UTF-8'}"></script>
     {/foreach}

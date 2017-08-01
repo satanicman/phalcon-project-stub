@@ -31,7 +31,6 @@ class IndexController extends ControllerBase
 
     public function logoutAction()
     {
-        $this->view->desable();
         $this->session->destroy();
         return $this->response->redirect('admin');
     }

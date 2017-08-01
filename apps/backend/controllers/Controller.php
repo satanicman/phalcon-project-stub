@@ -11,6 +11,9 @@ abstract class Controller extends \Phalcon\Mvc\Controller
     /** @var array Массив JS файлов */
     public $js_files = array();
 
+    /** @var array Массив JS файлов */
+    public $js_defs = array();
+
     /** @var bool Если ajax запрос, задать значение true */
     public $ajax = false;
 
@@ -97,6 +100,23 @@ abstract class Controller extends \Phalcon\Mvc\Controller
 
             if ($js_path && !in_array($js_path, $this->js_files)) {
                 $this->js_files[] = $js_path.($version ? '?'.$version : '');
+            }
+        }
+    }
+
+
+    /**
+     * Add a new javascript definition at bottom of page
+     *
+     * @param mixed $js_def
+     *
+     * @return void
+     */
+    public function addJsDef($js_def)
+    {
+        if (is_array($js_def)) {
+            foreach ($js_def as $key => $js) {
+                $this->js_defs[$key] = $js;
             }
         }
     }

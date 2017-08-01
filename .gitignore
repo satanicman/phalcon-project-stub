@@ -2,6 +2,8 @@
 Thumbs.db
 ehthumbs.db
 
+cache/
+
 # Folder config file
 Desktop.ini
 config.php
@@ -48,7 +50,6 @@ Temporary Items
 .apdisk
 .idea
 .phalcon
-public/config/
 bower_components/
 !bower_components/bootstrap-sass/
 node_modules/

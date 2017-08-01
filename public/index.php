@@ -47,10 +47,10 @@ try {
         ));
         $route->setName("admin");
 
-        $router->add('/admin/index', array(
+        $router->add('/admin/logout', array(
             'module' => 'backend',
-            'controller' => 'controlpanel',
-            'action' => 'index'
+            'controller' => 'index',
+            'action' => 'logout'
         ));
 
         $router->add('/admin/:controller/:action/:params', array(

@@ -1,4 +1,1 @@
-{extends file="../layouts/layout.tpl"}
-{block name="content"}
-    test
-{/block}
+{extends file="../layouts/theme.tpl"}
