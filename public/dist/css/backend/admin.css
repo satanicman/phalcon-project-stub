@@ -1,0 +1,159 @@
+/*position*/
+.position {
+    position: relative;
+}
+.position__image {
+    width: 100%;
+}
+.position__item {
+    position: absolute;
+    border: 1px solid #ff0000;
+}
+.position__item_num_1 {
+    left: 0;
+    top: 0;
+}
+.position__item_num_2 {
+    top: 0;
+    right: 0;
+}
+.position__item_num_3 {
+    top: 0;
+    left: 20%;
+}
+.position__item_num_4 {
+    top: 7%;
+    left: 20%;
+}
+.position__item_num_5 {
+    top: 7%;
+    right: 20%;
+}
+.position__item_num_6 {
+    left: 20%;
+    top: 34%;
+}
+.position__item_num_7 {
+    right: 20%;
+    top: 17.7%;
+}
+.position__item_num_8 {
+    right: 20%;
+    top: 47.4%;
+}
+.position__item_num_9 {
+    left: 30.7%;
+    bottom: 0;
+}
+
+.position-item_num_1 {
+    width: 20%;
+    height: 100%;
+}
+.position-item_num_2 {
+    width: 20%;
+    height: 100%;
+}
+.position-item_num_3 {
+    width: 60%;
+    height: 7%;
+    border-left-width: 0;
+    border-right-width: 0;
+}
+.position-item_num_4 {
+    width: 15%;
+    height: 4.3%;
+    border-left-width: 0;
+    border-top-width: 0;
+}
+.position-item_num_5 {
+    width: 15%;
+    height: 4.3%;
+    border-top-width: 0;
+    border-right-width: 0;
+}
+.position-item_num_6 {
+    width: 11%;
+    height: 41.2%;
+    border-left-width: 0;
+}
+.position-item_num_7 {
+    width: 15.9%;
+    height: 28%;
+    border-right-width: 0;
+}
+.position-item_num_8 {
+    width: 15.9%;
+    height: 28%;
+    border-right-width: 0;
+}
+.position-item_num_9 {
+    width: 33.7%;
+    height: 14%;
+}
+.position-item__input {
+    display: none;
+}
+.position-item__input:checked + .position-item__label {
+    background-color: #ff0000;
+}
+.position-item__label {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+}
+/*position #END*/
+#editor {
+    opacity: 0 !important;
+}
+.ui-sortable-helper {
+    display: table !important;
+    table-layout: fixed;
+}
+.ui-sortable-helper > * {
+    display: table-cell;
+    vertical-align: middle;
+}
+.dragGroup:before {
+    display: block;
+    height: 14px;
+    width: 16px;
+    position: absolute;
+    top: 50%;
+    margin-top: -7px;
+    left: 6px;
+    content: "";
+    font: normal normal normal 16px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translate(0, 0);
+}
+.dragGroup {
+    width: 90px;
+    cursor: move;
+    text-align: center;
+    position: relative;
+    font-size: 14px;
+    padding: 5px 5px 5px 30px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+.dragGroup:hover {
+    color: #fff;
+    background-color: #3c8dbc;
+}
+.dragGroup input {
+    height: 24px;
+    margin: 0;
+}
