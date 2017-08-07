@@ -2,7 +2,7 @@
 
 namespace Modules\Frontend\Controllers;
 use Modules\Models\Comments;
-use Modules\Models\Links;
+use Modules\Models\Link;
 use Modules\Models\Tools;
 
 class CommentsController extends ControllerBase
@@ -35,7 +35,7 @@ class CommentsController extends ControllerBase
             $comment->save();
         }
 
-        $links = new Links();
+        $links = new Link();
         if ($type == 'page')
             $this->response->redirect($links->getPageLink($id));
         elseif($type == 'rubric')

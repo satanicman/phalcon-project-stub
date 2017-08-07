@@ -42,16 +42,10 @@ try {
 
         $route = $router->add('/admin', array(
             'module' => 'backend',
-            'controller' => 'index',
+            'controller' => 'login',
             'action' => 'index'
         ));
         $route->setName("admin");
-
-        $router->add('/admin/logout', array(
-            'module' => 'backend',
-            'controller' => 'index',
-            'action' => 'logout'
-        ));
 
         $router->add('/admin/:controller/:action/:params', array(
             'module' => 'backend',
@@ -60,9 +54,9 @@ try {
             'params' => 3
         ));
 
-        $route = $router->add('admin/404', array(
+        $route = $router->add('/'._ADMIN_URL_.'/404', array(
             'module' => 'backend',
-            "controller" => "index",
+            "controller" => "error",
             "action" => "route404"
         ));
         $route->setName("backend-404");
@@ -123,6 +117,27 @@ try {
         $session->start();
         return $session;
     }, true);
+
+    $di->set(
+        'cookies',
+        function () {
+            $cookies = new \Phalcon\Http\Response\Cookies();
+
+            $cookies->useEncryption(false);
+
+            return $cookies;
+        },
+        true
+    );
+
+    $di->set(
+        'link',
+        function () {
+            $link = new \Modules\Models\Link();
+
+            return $link;
+        }
+    );
 
     $di->set('flash', function (){
         $flash = new \Phalcon\Flash\Session([

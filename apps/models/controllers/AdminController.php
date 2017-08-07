@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\Backend\Controllers;
+namespace Modules\Controllers;
 
+use Modules\Models\Context;
 use Modules\Models\Employee;
 use Modules\Models\Tools,
-    Modules\Models\Links,
     Modules\Models\Db;
 
-class ControllerBase extends Controller
+class AdminController extends Controller
 {
     /** @var array Массив щшибок */
     public $errors = array();
@@ -30,43 +30,71 @@ class ControllerBase extends Controller
         return true;
     }
 
-    public function afterExecuteRoute()
+    public function afterExecuteRoute($dispatcher)
+    {
+        parent::afterExecuteRoute($dispatcher);
+    }
+
+    public function init()
+    {
+        parent::init();
+
+        $this->context->employee = new Employee($this->context->cookies->get('id_employee')->getValue());
+
+        if (isset($_GET['logout'])) {
+            $this->context->employee->logout();
+        }
+
+        if ($this->context->cookies->has('last_activity')) {
+            if ($this->context->cookies->get('last_activity')->getValue() + 900 < time()) {
+                $this->context->employee->logout();
+            } else {
+                $this->context->cookies->set('last_activity', time());
+                $this->context->cookies->send();
+            }
+        }
+
+        if ($this->router->getControllerName() != 'login' && (!isset($this->context->employee) || !$this->context->employee->isLoggedBack())) {
+            if (isset($this->context->employee)) {
+                $this->context->employee->logout();
+            }
+
+            $url = $this->context->link->getAdminLink('', '');
+            $this->response->redirect($url);
+        }
+    }
+
+    public function postProcess()
     {
     }
 
-    public function initialize()
-	{
-        // Подключение всех необходимых библиотек
-	    $this->setMedia();
+    protected function redirect()
+    {
+        return $this->response->redirect($this->redirect_after);
+    }
 
-        if(!empty($this->page_name))
-            $page_name = $this->page_name;
-        else
-            $page_name = 'skin-blue';
+    public function display()
+    {
+        $class_name = '';
+        if(!empty($this->php_self))
+            $class_name = $this->php_self;
 
-	    $this->view->setVars(array(
-	        'baseUrl' => _BASE_URL_.'admin',
-	        'theme_img_dir' => _BACK_IMG_DIR_,
-	        'theme_css_dir' => _BACK_CSS_DIR_,
-	        'theme_js_dir' => _BACK_JS_DIR_,
-            'user' => new Employee($this->session->get('auth')['id_employee']),
-            'flash' => $this->flash,
-            'page_name' => $page_name,
-            'css_files' => $this->css_files,
-            'js_files' => $this->js_files,
-            'js_def' => $this->js_defs
-        ));
-
-        if((!$this->session->has('auth') || !$this->checkAccess()) && $this->router->getControllerName() != 'index') {
-            return $this->response->redirect(['for' => 'admin']);
-        }
-
-        $this->view->setVars([
+        $this->view->setVars(array(
+            'baseUrl'           => _BASE_URL_.'admin',
+            'theme_img_dir'     => _BACK_IMG_DIR_,
+            'theme_css_dir'     => _BACK_CSS_DIR_,
+            'theme_js_dir'      => _BACK_JS_DIR_,
+            'user'              => new Employee($this->cookies->get('id_employee')),
+            'flash'             => $this->flash,
+            'class_name'        => $class_name,
+            'css_files'         => $this->css_files,
+            'js_files'          => $this->js_files,
+            'js_def'            => $this->js_defs,
             'tabs' => array()
-        ]);
-	}
+        ));
+    }
 
-	public function setMedia()
+    public function setMedia()
     {
         $this->addCSS(_BASE_URL_ . 'libs/bootstrap/css/bootstrap.min.css');
         $this->addCSS(_BASE_URL_ . 'libs/bootstrap/css/bootstrap.utilities.min.css');

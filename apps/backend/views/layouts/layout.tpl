@@ -26,7 +26,7 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="skin-blue {if $page_name}{$page_name}{/if}">
+<body class="skin-blue{if $class_name} {$class_name}{/if}">
 {block name="content"}
 
 {/block}

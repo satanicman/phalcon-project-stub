@@ -2,7 +2,7 @@
 
 namespace Modules\Models;
 
-class Links extends \Phalcon\Mvc\Model
+class Link extends \Phalcon\Mvc\Model
 {
     protected $page_url = 'page';
     protected $category_url = 'category';
@@ -84,5 +84,15 @@ class Links extends \Phalcon\Mvc\Model
             return $page.(preg_match('/\?/', $page) ? '&' : '?').'p='.$p;
         else
             return $page;
+    }
+
+
+    public function getAdminLink($controller, $action = 'index', $params = array())
+    {
+        $query = http_build_query($params, '', '&');
+
+        $url = strtolower(preg_replace('/Controller$/', '', $controller));
+
+        return '/' . _ADMIN_URL_ . ($url ? '/' . $url : '') . ($action ? '/' . $action : '') . ($query ? '?' : '') . $query;
     }
 }

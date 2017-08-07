@@ -23,7 +23,8 @@ class Module
 			'Modules\Backend\Controllers'   => _APPS_BACK_CONTROLLERS_DIR_,
 			'Modules\Models'                => _MODELS_DIR_,
 			'Modules\Backend\Plugins'       => _APPS_BACK_PLUGINS_DIR_,
-            'Phalcon'                       => _PHALCON_DIR_
+            'Phalcon'                       => _PHALCON_DIR_,
+            'Modules\Controllers'           => _MODELS_DIR_.'controllers'
 		))->register();
 	}
 
@@ -37,7 +38,7 @@ class Module
                 //Handle 404 exceptions
                 if ($exception instanceof \Phalcon\Mvc\Dispatcher\Exception) {
                     $dispatcher->forward(array(
-                        'controller' => 'index',
+                        'controller' => 'error',
                         'action'     => 'route404'
                     ));
 
@@ -46,7 +47,7 @@ class Module
 
                 //Handle other exceptions
                 $dispatcher->forward(array(
-                    'controller' => 'index',
+                    'controller' => 'error',
                     'action'     => 'route503'
                 ));
 

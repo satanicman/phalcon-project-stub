@@ -5,7 +5,7 @@
             <b>Admin</b>Panel
         </div><!-- /.login-logo -->
         <div class="login-box-body">
-            <form action="{$baseUrl}" method="post">
+            <form action="#" method="post">
                 {$flash->output()}
                 <div class="form-group has-feedback">
                     <input type="text" name="email" class="form-control" placeholder="E-mail" />
@@ -16,6 +16,12 @@
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
                 <div class="row">
+                    <div class="col-xs-8">
+                        <label>
+                            <input type="checkbox" name="stay_logged_in" id="stay_logged_in" value="1" class="icheck">&nbsp;Запомнить
+                            меня
+                        </label>
+                    </div>
                     <div class="col-xs-4">
                         <button type="submit" class="btn btn-primary btn-block btn-flat">Войти</button>
                     </div><!-- /.col -->

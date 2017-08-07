@@ -4,7 +4,7 @@ namespace Modules\Frontend\Controllers;
 
 use Modules\Models\Category as Category;
 use Modules\Models\Page;
-use Modules\Models\Links;
+use Modules\Models\Link;
 use Modules\Models\Tools;
 use Modules\Models\Configuration;
 
@@ -47,7 +47,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
     public function setGlobalVars() {
         $this->view->setVars(array(
             'baseUrl' => _URL_,
-            'link' => new Links,
+            'link' => new Link,
             'url' => $this->url.'/'
         ));
     }

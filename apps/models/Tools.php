@@ -92,7 +92,7 @@ class Tools extends \Phalcon\Mvc\Model
         if(!count($categories))
             return false;
         $html = '';
-        $links = new Links();
+        $links = new Link();
         foreach ($categories as $category) {
             $classes = array();
             if(in_array($category['id_category'], $selected))
@@ -163,5 +163,18 @@ class Tools extends \Phalcon\Mvc\Model
         }
 
         return (string)$ip;
+    }
+
+    /**
+     * Delete unicode class from regular expression patterns
+     * @param string $pattern
+     * @return string pattern
+     */
+    public static function cleanNonUnicodeSupport($pattern)
+    {
+        if (!defined('PREG_BAD_UTF8_OFFSET')) {
+            return $pattern;
+        }
+        return preg_replace('/\\\[px]\{[a-z]{1,2}\}|(\/[a-z]*)u([a-z]*)$/i', '$1$2', $pattern);
     }
 }

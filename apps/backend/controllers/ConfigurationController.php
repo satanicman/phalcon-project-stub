@@ -1,9 +1,11 @@
 <?php
 
 namespace Modules\Backend\Controllers;
-use Modules\Models\Configuration;
 
-class ConfigurationController extends ControllerBase
+use Modules\Models\Configuration;
+use Modules\Controllers\AdminController;
+
+class ConfigurationController extends AdminController
 {
     protected $url = 'configuration';
 

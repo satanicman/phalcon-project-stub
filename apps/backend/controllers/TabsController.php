@@ -3,8 +3,9 @@
 namespace Modules\Backend\Controllers;
 
 use Modules\Models\Tab;
+use Modules\Controllers\AdminController;
 
-class TabsController extends ControllerBase
+class TabsController extends AdminController
 {
     public $php_self = 'tabs';
 

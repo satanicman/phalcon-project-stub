@@ -17,8 +17,7 @@ class LinkRewriteValidator extends Validator
      */
     public function validate(Validation $validator, $attribute)
     {
-        $value = $validator->getValue($attribute);
-        if (!preg_match('/^([_a-zA-Z0-9\-]+|#)$/', $value)) {
+        if (!preg_match('/^([_a-zA-Z0-9\-]+|#)$/', $validator->getValue($attribute))) {
             $message = $this->getOption("message");
 
             if (!$message) {

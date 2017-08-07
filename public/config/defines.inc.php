@@ -3,6 +3,10 @@ if (!defined('_BASE_URL_')) {
     define('_BASE_URL_', 'http://teplo.loc/');
 }
 
+if (!defined('_ADMIN_URL_')) {
+    define('_ADMIN_URL_', 'admin');
+}
+
 $currentDir = dirname(__FILE__);
 
 /* Debug only */

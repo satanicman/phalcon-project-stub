@@ -5,6 +5,7 @@ use Phalcon\Validation;
 use Phalcon\Validation\Validator\Email;
 use Phalcon\Validation\Validator\StringLength;
 use Phalcon\Validation\Validator;
+use Phalcon\Http\Response\Cookies;
 
 class Employee extends ObjectModel
 {
@@ -17,6 +18,13 @@ class Employee extends ObjectModel
      * @Column(type="integer", length=10, nullable=false)
      */
     public $id_employee;
+
+    /**
+     *
+     * @var integer
+     * @Column(type="integer", length=10, nullable=false)
+     */
+    public $id_profile;
 
     /**
      *
@@ -45,6 +53,13 @@ class Employee extends ObjectModel
      * @Column(type="string", length=32, nullable=false)
      */
     public $password;
+
+    /**
+     *
+     * @var integer
+     * @Column(type="integer", length=1, nullable=false)
+     */
+    public $default_tab = 0;
 
     /**
      *
@@ -173,5 +188,50 @@ class Employee extends ObjectModel
             echo "</pre>";
             die();
         }
+    }
+
+    public function logout()
+    {
+        if(Context::getContext()->cookies->has('id_employee'))
+            Context::getContext()->cookies->get('id_employee')->delete();
+
+        if(Context::getContext()->cookies->has('password'))
+            Context::getContext()->cookies->get('password')->delete();
+
+        if(Context::getContext()->cookies->has('last_activity'))
+            Context::getContext()->cookies->get('last_activity')->delete();
+
+        return true;
+    }
+
+
+    /**
+     * Check employee informations saved into cookie and return employee validity
+     *
+     * @return bool employee validity
+     */
+    public function isLoggedBack()
+    {
+        return $this->id_employee && Validate::isUnsignedId($this->id_employee) && Employee::checkPassword($this->id_employee,
+                Context::getContext()->cookies->get('password')->getValue());
+    }
+
+    /**
+     * Check if employee password is the right one
+     *
+     * @param $id_employee
+     * @param string $password Password
+     * @return bool result
+     */
+    public static function checkPassword($id_employee, $password)
+    {
+        if (!Validate::isUnsignedId($id_employee) || !Validate::isPasswd($password, 8)) {
+            die('Employee : checkPassword');
+        }
+
+
+        $sql = 'SELECT e.id_employee FROM Modules\Models\Employee e WHERE e.id_employee = :id_employee: AND password = :password:';
+
+        return Db::getInstance()->executeQuery($sql, ['id_employee' => $id_employee, 'password' => $password])->getFirst();
     }
 }

@@ -1,10 +1,15 @@
 <?php
 
-namespace Modules\Backend\Controllers;
+namespace Modules\Controllers;
 
+use Modules\Models\Context;
+use Modules\Models\Validate;
 
 abstract class Controller extends \Phalcon\Mvc\Controller
 {
+    /** @var Context */
+    protected $context;
+
     /** @var array Массив CSS фа */
     public $css_files = array();
 
@@ -20,13 +25,13 @@ abstract class Controller extends \Phalcon\Mvc\Controller
     /** @var string Название контроллера */
     public $php_self;
 
-    /** @var string Название страницы */
-    public $page_name;
+    /** @var array Ошибки */
+    public $errors = array();
 
-    /**
-     * Проверка доступа пользователя к данному контроллеру
-     */
-    abstract public function checkAccess();
+    /** @var array List of PHP errors */
+    public static $php_errors = array();
+
+    protected $redirect_after = null;
 
     /**
      * Устанавливаем CSS и JS файлы контроллеров
@@ -34,6 +39,61 @@ abstract class Controller extends \Phalcon\Mvc\Controller
      * @return bool
      */
     abstract public function setMedia();
+
+    /**
+     * Обработка данных из запросов: process input, process AJAX, etc.
+     */
+    abstract public function postProcess();
+
+    /**
+     * Redirects to $this->redirect_after after the process if there is no error
+     */
+    abstract protected function redirect();
+
+    /**
+     * Displays page view
+     */
+    abstract public function display();
+
+    /**
+     * Initialize the page
+     */
+    public function init()
+    {
+        if (_MODE_DEV_) {
+            set_error_handler(array(__CLASS__, 'myErrorHandler'));
+        }
+    }
+
+    /**
+     * Старт обработки контролеров
+     */
+    public function initialize()
+    {
+        $di = \Phalcon\DI::getDefault();
+
+        $this->context = Context::getContext();
+        $this->context->controller = $this;
+        $this->context->cookies = $di['cookies'];
+        $this->context->session = $di['session'];
+        $this->context->link = $di['link'];
+
+        $this->init();
+        // Подключение всех необходимых библиотек
+        $this->setMedia();
+
+        // postProcess handles ajaxProcess
+        $this->postProcess();
+
+        $this->display();
+    }
+
+    public function afterExecuteRoute($dispatcher)
+    {
+        if (!empty($this->redirect_after)) {
+            $this->redirect();
+        }
+    }
 
     /**
      * Добавляет новые файлы стилей в шапку сайта
@@ -119,5 +179,50 @@ abstract class Controller extends \Phalcon\Mvc\Controller
                 $this->js_defs[$key] = $js;
             }
         }
+    }
+
+
+    /**
+     * Custom error handler
+     *
+     * @param string $errno
+     * @param string $errstr
+     * @param string $errfile
+     * @param int $errline
+     * @return bool
+     */
+    public static function myErrorHandler($errno, $errstr, $errfile, $errline)
+    {
+        if (error_reporting() === 0) {
+            return false;
+        }
+
+        switch ($errno) {
+            case E_USER_ERROR:
+            case E_ERROR:
+                die('Fatal error: '.$errstr.' in '.$errfile.' on line '.$errline);
+                break;
+            case E_USER_WARNING:
+            case E_WARNING:
+                $type = 'Warning';
+                break;
+            case E_USER_NOTICE:
+            case E_NOTICE:
+                $type = 'Notice';
+                break;
+            default:
+                $type = 'Unknown error';
+                break;
+        }
+
+        Controller::$php_errors[] = array(
+            'type'    => $type,
+            'errline' => (int)$errline,
+            'errfile' => str_replace('\\', '\\\\', $errfile), // Hack for Windows paths
+            'errno'   => (int)$errno,
+            'errstr'  => $errstr
+        );
+
+        return true;
     }
 }

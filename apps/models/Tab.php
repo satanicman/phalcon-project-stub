@@ -6,7 +6,7 @@ use Phalcon\Validation;
 use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator;
 
-class Tab extends \Phalcon\Mvc\Model
+class Tab extends ObjectModel
 {
 
     /**
@@ -104,7 +104,7 @@ class Tab extends \Phalcon\Mvc\Model
      */
     public function getSource()
     {
-        return 'modules';
+        return 'tab';
     }
 
     /**
@@ -128,80 +128,5 @@ class Tab extends \Phalcon\Mvc\Model
     {
         return parent::findFirst($parameters);
     }
-
-    /**
-     * return an available position in subtab for parent $id_parent
-     *
-     * @param mixed $id_parent
-     * @return int
-     */
-    public static function getNewLastPosition($id_parent)
-    {
-        $sql = '
-			SELECT IFNULL(MAX(position),0)+1
-			FROM `tab`
-			WHERE `id_parent` = '.(int)$id_parent;
-
-        return $sql;
-    }
-
-    public function cleanPositions($id_parent)
-    {
-//        $result = '
-//			SELECT `id_tab`
-//			FROM `tab`
-//			WHERE `id_parent` = '.(int)$id_parent.'
-//			ORDER BY `position`
-//		';
-
-//        $sizeof = count($result);
-//        for ($i = 0; $i < $sizeof; ++$i) {
-//            $sql = '
-//				UPDATE `tab`
-//				SET `position` = '.($i + 1).'
-//				WHERE `id_tab` = '.(int)$result[$i]['id_tab']
-//            ;
-//        }
-
-        return true;
-    }
-
-    public function updatePosition($way, $position)
-    {
-//        if (!$res = '
-//			SELECT t.`id_tab`, t.`position`, t.`id_parent`
-//			FROM `tab` t
-//			WHERE t.`id_parent` = '.(int)$this->id_parent.'
-//			ORDER BY t.`position` ASC'
-//        ) {
-//            return false;
-//        }
-//
-//        foreach ($res as $tab) {
-//            if ((int)$tab['id_tab'] == (int)$this->id) {
-//                $moved_tab = $tab;
-//            }
-//        }
-//
-//        if (!isset($moved_tab) || !isset($position)) {
-//            return false;
-//        }
-//        $result = '
-//			UPDATE `tab`
-//			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
-//			WHERE `position`
-//			'.($way
-//                    ? '> '.(int)$moved_tab['position'].' AND `position` <= '.(int)$position
-//                    : '< '.(int)$moved_tab['position'].' AND `position` >= '.(int)$position).'
-//			AND `id_parent`='.(int)$moved_tab['id_parent'])
-//            && '
-//			UPDATE `tab`
-//			SET `position` = '.(int)$position.'
-//			WHERE `id_parent` = '.(int)$moved_tab['id_parent'].'
-//			AND `id_tab`='.(int)$moved_tab['id_tab'];
-//
-//        return $result;
-    }
-
 }
 
